@@ -1,48 +1,21 @@
-import React from "react";
 import { builder } from "@builder.io/sdk";
+import { RenderBuilderContent } from "@/components/builder";
 
-// Replace with your Public API Key
-builder.init("YJIGb4i01jvw0SRdL5Bt");
+builder.init("f154bf67d18c42acae68604617b93b4b");
 
-export default async function DataExample() {
-  const menus = await builder.getAll("nav-menus", {
-    prerender: false,
-  });
+export default async function DataExamplePage() {
+  const content = await builder
+    .get("page", {
+      userAttributes: {
+        urlPath: "/data-example",
+      },
+      options: { enrich: true },
+    })
+    .toPromise();
 
-  return (
-    <>
-      <header>
-        <nav>
-          {menus.map((menu, index) => (
-            <>
-              <div style={{ marginTop: 20 }}>{menu.data?.name}</div>
-              {menu.data?.submenus?.map((submenu) =>
-                submenu.menuItems.map((menuItem, index) => (
-                  <a
-                    key={index}
-                    href={menuItem.itemLink}
-                    style={{ margin: 10 }}
-                  >
-                    {menuItem.itemName}
-                  </a>
-                ))
-              )}
-            </>
-          ))}
-        </nav>
-      </header>
-      <div
-        style={{
-          padding: 20,
-          textAlign: "center",
-          background: "cyan",
-          fontSize: 24,
-          minHeight: 300,
-          marginTop: 50,
-        }}
-      >
-        Your site content
-      </div>
-    </>
+  return content ? (
+    <RenderBuilderContent content={content} model="page" />
+  ) : (
+    <div>⚠️ No content found at path `/data-example`.</div>
   );
 }

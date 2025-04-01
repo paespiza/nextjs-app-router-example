@@ -1,54 +1,21 @@
-import React from "react";
 import { builder } from "@builder.io/sdk";
-import Head from "next/head";
 import { RenderBuilderContent } from "@/components/builder";
 
-// Replace with your Public API Key
-builder.init("YJIGb4i01jvw0SRdL5Bt");
+builder.init("f154bf67d18c42acae68604617b93b4b");
 
-interface PageProps {
-  params: {
-    page: string[];
-  };
-}
-
-export default async function SectionExample(props: PageProps) {
-  const model = "blog-article";
+export default async function SectionExamplePage() {
   const content = await builder
-    .get("blog-article", {
-      prerender: false,
+    .get("page", {
+      userAttributes: {
+        urlPath: "/section-example",
+      },
+      options: { enrich: true },
     })
     .toPromise();
 
-  return (
-    <>
-      <Head>
-        <title>{content?.data.title}</title>
-      </Head>
-      <div
-        style={{
-          background: "purple",
-          fontSize: 24,
-          textAlign: "center",
-          height: 200,
-          padding: 20,
-        }}
-      >
-        Non builder content
-      </div>
-      {/* Render the Builder page */}
-      <RenderBuilderContent content={content} model={model} />
-      <div
-        style={{
-          background: "blue",
-          fontSize: 14,
-          textAlign: "center",
-          height: 200,
-          padding: 20,
-        }}
-      >
-        Non builder content
-      </div>
-    </>
+  return content ? (
+    <RenderBuilderContent content={content} model="page" />
+  ) : (
+    <div>⚠️ No content found at path `/section-example`.</div>
   );
 }
