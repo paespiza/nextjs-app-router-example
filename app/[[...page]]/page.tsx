@@ -8,28 +8,25 @@ builder.init("YJIGb4i01jvw0SRdL5Bt");
 
 interface PageProps {
   params: {
-    page: string[];
+    page?: string[];
   };
 }
 
-export default async function Page(props: PageProps) {
-  const model = "page";
+
+export default async function Page({ params }: PageProps) {
+  const urlPath = '/' + (params.page?.join('/') || '');
+
   const content = await builder
-    .get("page", {
-      userAttributes: {
-        urlPath: "/" + (props?.params?.page?.join("/") || ""),
-      },
-      prerender: false,
+    .get('page', {
+      userAttributes: { urlPath },
+      options: { enrich: true },
     })
     .toPromise();
 
-  return (
-    <>
-      <Head>
-        <title>{content?.data.title}</title>
-      </Head>
-      {/* Render the Builder page */}
-      <RenderBuilderContent content={content} model={model} />
-    </>
+  return content ? (
+    <RenderBuilderContent content={content} model="page" />
+  ) : (
+    <div>⚠️ No content found at path `{urlPath}`.</div>
   );
 }
+
