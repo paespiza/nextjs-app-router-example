@@ -3,21 +3,18 @@ import { builder } from "@builder.io/sdk";
 import Head from "next/head";
 import { RenderBuilderContent } from "@/components/builder";
 
-// Replace with your Public API Key
-builder.init("YJIGb4i01jvw0SRdL5Bt");
+// Replace with your actual Public API Key
+builder.init("f154bf67d18c42acae68604617b93b4b");
 
-interface PageProps {
-  params: {
-    page?: string[];
-  };
-}
-
-
-export default async function Page({ params }: PageProps) {
-  const urlPath = '/' + (params.page?.join('/') || '');
+export default async function Page({
+  params,
+}: {
+  params: { page?: string[] };
+}) {
+  const urlPath = "/" + (params.page?.join("/") || "");
 
   const content = await builder
-    .get('page', {
+    .get("page", {
       userAttributes: { urlPath },
       options: { enrich: true },
     })
@@ -29,4 +26,3 @@ export default async function Page({ params }: PageProps) {
     <div>⚠️ No content found at path `{urlPath}`.</div>
   );
 }
-
