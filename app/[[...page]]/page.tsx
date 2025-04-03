@@ -1,8 +1,7 @@
 import { builder } from "@builder.io/sdk";
 import { RenderBuilderContent } from "@/components/builder";
 
-// Initialize Builder
-builder.init("f154bf67d18c42acae68604617b93b4b");
+
 
 export default async function Page({ params }: any) {
   const urlPath = "/" + (params?.page?.join("/") || "");

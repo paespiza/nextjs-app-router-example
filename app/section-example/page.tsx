@@ -4,7 +4,6 @@ import { builder } from "@builder.io/sdk";
 import { RenderBuilderContent } from "@/components/builder";
 import { useState, useEffect } from "react";
 
-builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
 export default function BlogPostPage({ params }: any) {
   const [content, setContent] = useState(null);
