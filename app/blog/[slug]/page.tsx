@@ -1,10 +1,8 @@
 import { builder } from "@builder.io/sdk";
 import { RenderBuilderContent } from "@/components/builder";
 
-// Init Builder with your API Key
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
-// Skip TypeScript inference by using `: any`
 export default async function BlogPostPage({ params }: any) {
   const slug = params?.slug;
   const urlPath = `/blog/${slug}`;
