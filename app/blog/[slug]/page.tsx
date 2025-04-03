@@ -2,6 +2,7 @@
 
 import { builder } from "@builder.io/sdk";
 import { RenderBuilderContent } from "@/components/builder";
+import { BuilderComponent } from "@builder.io/react";
 import { useState, useEffect } from "react";
 
 // Initialize Builder API key
@@ -19,7 +20,7 @@ export default function BlogPostPage({ params }: any) {
       }
     };
     resolveParams();
-  }, [params]);  // Re-run when params changes
+  }, [params]);
 
   // Fetch the blog post content once slug is available
   useEffect(() => {
@@ -41,14 +42,21 @@ export default function BlogPostPage({ params }: any) {
     }
   }, [slug]);
 
-  // Show loading or error message until slug is set
   if (!slug) {
     return <div>Loading blog post...</div>;
   }
 
-  return content ? (
-    <RenderBuilderContent content={content} model="blog-post" />
-  ) : (
-    <div>⚠️ Blog post not found</div>
+  return (
+    <>
+      {/* Main blog post content */}
+      {content ? (
+        <RenderBuilderContent content={content} model="blog-post" />
+      ) : (
+        <div>⚠️ Blog post not found</div>
+      )}
+
+      {/* Optional: layout section */}
+      <BuilderComponent model="blog-post-layout" />
+    </>
   );
 }
