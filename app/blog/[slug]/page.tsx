@@ -5,7 +5,7 @@ import { RenderBuilderContent } from "@/components/builder";
 import { BuilderComponent } from "@builder.io/react";
 import { useState, useEffect } from "react";
 
-
+builder.init("f154bf67d18c42acae68064617b93b4b");
 
 export default function BlogPostPage({ params }: any) {
   const [content, setContent] = useState(null);

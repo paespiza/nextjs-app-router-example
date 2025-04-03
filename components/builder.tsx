@@ -5,7 +5,6 @@ import { BuilderComponent, useIsPreviewing } from "@builder.io/react";
 import DefaultErrorPage from "next/error";
 import { builder } from "@builder.io/sdk";
 
-// ✅ Hardcode your API key here
 builder.init("f154bf67d18c42acae68064617b93b4b");
 
 type BuilderPageProps = ComponentProps<typeof BuilderComponent>;
