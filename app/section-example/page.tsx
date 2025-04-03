@@ -30,6 +30,9 @@ export default function BlogPostPage({ params }: any) {
             userAttributes: { urlPath: `/blog/${slug}` },
           }).toPromise(),
         ]);
+        
+        console.log("Fetched Builder content:", contentData);
+
 
         setContent(contentData);
         setLayout(layoutData);
