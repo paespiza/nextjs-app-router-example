@@ -1,7 +1,6 @@
 import { builder } from "@builder.io/sdk";
 import { RenderBuilderContent } from "@/components/builder";
 
-builder.init("f154bf67d18c42acae68064617b93b4b");
 
 export default async function DataExamplePage() {
   const content = await builder
