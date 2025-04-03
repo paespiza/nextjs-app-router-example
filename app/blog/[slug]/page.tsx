@@ -14,9 +14,8 @@ export default function BlogPostPage({ params }: any) {
   // Fetch slug from params when component mounts or changes
   useEffect(() => {
     const resolveParams = async () => {
-      const resolvedParams = await params;  // Unwrap params using React.use()
-      if (resolvedParams?.slug) {
-        setSlug(resolvedParams.slug);
+      if (params?.slug) {
+        setSlug(params.slug);
       }
     };
     resolveParams();
@@ -42,7 +41,7 @@ export default function BlogPostPage({ params }: any) {
     }
   }, [slug]);
 
-  // Display loading message if slug is not yet set
+  // Show loading or error message until slug is set
   if (!slug) {
     return <div>Loading blog post...</div>;
   }
