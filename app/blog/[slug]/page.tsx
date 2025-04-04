@@ -4,17 +4,10 @@ import { builder, BuilderComponent, useIsPreviewing } from "@builder.io/react";
 import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 
-// Hardcode your API key here
+// ✅ Initialize Builder with your actual API key
 builder.init("f154bf67d18c42acae68064617b93b4b");
 
-interface PageProps {
-  params: {
-    slug: string;
-    locale: "en-US" | "en-GB" | "en-CA" | "en-AU" | "es-ES";
-  };
-}
-
-export default function BlogPostPage({ params }: PageProps) {
+export default function BlogPostPage({ params }: { params: { slug: string; locale: string } }) {
   const { slug, locale } = params;
   const [content, setContent] = useState<any>(null);
   const isPreviewing = useIsPreviewing();
@@ -24,7 +17,7 @@ export default function BlogPostPage({ params }: PageProps) {
       .get("blog-post", {
         userAttributes: {
           urlPath: `/blog/${slug}`,
-          locale: locale,
+          locale,
         },
       })
       .toPromise()
