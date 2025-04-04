@@ -1,26 +1,26 @@
-import { builder } from "@builder.io/react";
-import { RenderBuilderContent } from "@/components/builder";
-import { notFound } from "next/navigation";
+import { builder } from '@builder.io/react';
+import { RenderBuilderContent } from '@/components/builder';
+import { notFound } from 'next/navigation';
+import { cache } from 'react';
 
-builder.init("f154bf67d18c42acae68064617b93b4b");
-
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { slug: string; locale: string };
-}) {
+const getContent = cache(async (slug: string, locale: string) => {
   const content = await builder
-    .get("blog-post", {
+    .get('blog-post', {
       userAttributes: {
-        urlPath: `/blog/${params.slug}`,
-        locale: params.locale,
+        urlPath: `/blog/${slug}`,
+        locale,
       },
     })
     .toPromise();
 
-  if (!content) {
-    notFound();
-  }
+  return content;
+});
+
+export default async function BlogPostPage({ params }: { params: { slug: string; locale: string } }) {
+  const { slug, locale } = params;
+  const content = await getContent(slug, locale);
+
+  if (!content) return notFound();
 
   return <RenderBuilderContent content={content} model="blog-post" />;
 }
