@@ -1,3 +1,5 @@
+/*
+
 import { builder } from "@builder.io/sdk";
 import { RenderBuilderContent } from "@/components/builder";
 
@@ -18,3 +20,4 @@ export default async function DataExamplePage() {
     <div>⚠️ No content found at path `/data-example`.</div>
   );
 }
+*/
