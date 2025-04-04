@@ -1,32 +1,26 @@
-"use client";
-
-import { builder, BuilderComponent, useIsPreviewing } from "@builder.io/react";
-import { useEffect, useState } from "react";
+import { builder } from "@builder.io/react";
+import { RenderBuilderContent } from "@/components/builder";
 import { notFound } from "next/navigation";
 
-// ✅ Initialize Builder with your actual API key
 builder.init("f154bf67d18c42acae68064617b93b4b");
 
-export default function BlogPostPage({ params }: { params: { slug: string; locale: string } }) {
-  const { slug, locale } = params;
-  const [content, setContent] = useState<any>(null);
-  const isPreviewing = useIsPreviewing();
+export default async function BlogPostPage({
+  params,
+}: {
+  params: { slug: string; locale: string };
+}) {
+  const content = await builder
+    .get("blog-post", {
+      userAttributes: {
+        urlPath: `/blog/${params.slug}`,
+        locale: params.locale,
+      },
+    })
+    .toPromise();
 
-  useEffect(() => {
-    builder
-      .get("blog-post", {
-        userAttributes: {
-          urlPath: `/blog/${slug}`,
-          locale,
-        },
-      })
-      .toPromise()
-      .then((result) => setContent(result));
-  }, [slug, locale]);
-
-  if (!content && !isPreviewing) {
+  if (!content) {
     notFound();
   }
 
-  return <BuilderComponent model="blog-post" content={content} />;
+  return <RenderBuilderContent content={content} model="blog-post" />;
 }
