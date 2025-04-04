@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import { useRouter, usePathname } from "next/navigation";
 import { useTransition } from "react";
@@ -40,3 +40,4 @@ export default function LocalePicker() {
     </div>
   );
 }
+*/

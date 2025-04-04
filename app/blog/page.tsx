@@ -5,32 +5,29 @@ import { RenderBuilderContent } from "@/components/builder";
 import { BuilderComponent } from "@builder.io/react";
 import { useState, useEffect } from "react";
 
+
 export default function BlogPostPage({ params }: any) {
   const [content, setContent] = useState(null);
   const [slug, setSlug] = useState<string | null>(null);
-  const [locale, setLocale] = useState<string | null>(null); // ✅ add locale state
 
-  // Fetch slug and locale from params
+  // Fetch slug from params when component mounts or changes
   useEffect(() => {
-    if (params?.slug) {
-      setSlug(params.slug);
-    }
-    if (params?.locale) {
-      setLocale(params.locale);
-    }
+    const resolveParams = async () => {
+      if (params?.slug) {
+        setSlug(params.slug);
+      }
+    };
+    resolveParams();
   }, [params]);
 
-  // Fetch content with slug + locale
+  // Fetch the blog post content once slug is available
   useEffect(() => {
-    if (slug && locale) {
+    if (slug) {
       const fetchData = async () => {
         try {
           const contentData = await builder
             .get("blog-post", {
-              userAttributes: {
-                urlPath: `/blog/${slug}`,
-                locale: locale, // ✅ pass locale here
-              },
+              userAttributes: { urlPath: `/blog/${slug}` },
             })
             .toPromise();
           setContent(contentData);
@@ -41,7 +38,7 @@ export default function BlogPostPage({ params }: any) {
 
       fetchData();
     }
-  }, [slug, locale]);
+  }, [slug]);
 
   if (!slug) {
     return <div>Loading blog post...</div>;
@@ -49,12 +46,14 @@ export default function BlogPostPage({ params }: any) {
 
   return (
     <>
+      {/* Main blog post content */}
       {content ? (
         <RenderBuilderContent content={content} model="blog-post" />
       ) : (
         <div>⚠️ Blog post not found</div>
       )}
 
+      {/* Optional: layout section */}
       <BuilderComponent model="blog-post-layout" />
     </>
   );
