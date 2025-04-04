@@ -1,12 +1,11 @@
-// app/blog/[slug]/page.tsx
-
 "use client";
 
-import { builder, BuilderComponent, BuilderContent } from "@builder.io/react";
-import { notFound } from "next/navigation";
+import { builder, BuilderComponent, useIsPreviewing } from "@builder.io/react";
 import { useEffect, useState } from "react";
+import { notFound } from "next/navigation";
 
-
+// Hardcode your API key here
+builder.init("f154bf67d18c42acae68064617b93b4b");
 
 interface PageProps {
   params: {
@@ -16,9 +15,9 @@ interface PageProps {
 }
 
 export default function BlogPostPage({ params }: PageProps) {
-  const [content, setContent] = useState<BuilderContent | null>(null);
-  const [loading, setLoading] = useState(true);
   const { slug, locale } = params;
+  const [content, setContent] = useState<any>(null);
+  const isPreviewing = useIsPreviewing();
 
   useEffect(() => {
     builder
@@ -29,14 +28,12 @@ export default function BlogPostPage({ params }: PageProps) {
         },
       })
       .toPromise()
-      .then((result) => {
-        setContent(result);
-        setLoading(false);
-      });
+      .then((result) => setContent(result));
   }, [slug, locale]);
 
-  if (loading) return <div>Loading...</div>;
-  if (!content) return notFound();
+  if (!content && !isPreviewing) {
+    notFound();
+  }
 
   return <BuilderComponent model="blog-post" content={content} />;
 }
