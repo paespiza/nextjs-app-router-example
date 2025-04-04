@@ -1,26 +1,61 @@
-import { builder } from '@builder.io/react';
-import { RenderBuilderContent } from '@/components/builder';
-import { notFound } from 'next/navigation';
-import { cache } from 'react';
+"use client";
 
-const getContent = cache(async (slug: string, locale: string) => {
-  const content = await builder
-    .get('blog-post', {
-      userAttributes: {
-        urlPath: `/blog/${slug}`,
-        locale,
-      },
-    })
-    .toPromise();
+import { builder } from "@builder.io/sdk";
+import { RenderBuilderContent } from "@/components/builder";
+import { BuilderComponent } from "@builder.io/react";
+import { useState, useEffect } from "react";
 
-  return content;
-});
+export default function BlogPostPage({ params }: any) {
+  const [content, setContent] = useState(null);
+  const [slug, setSlug] = useState<string | null>(null);
+  const [locale, setLocale] = useState<string | null>(null); // ✅ add locale state
 
-export default async function BlogPostPage({ params }: { params: { slug: string; locale: string } }) {
-  const { slug, locale } = params;
-  const content = await getContent(slug, locale);
+  // Fetch slug and locale from params
+  useEffect(() => {
+    if (params?.slug) {
+      setSlug(params.slug);
+    }
+    if (params?.locale) {
+      setLocale(params.locale);
+    }
+  }, [params]);
 
-  if (!content) return notFound();
+  // Fetch content with slug + locale
+  useEffect(() => {
+    if (slug && locale) {
+      const fetchData = async () => {
+        try {
+          const contentData = await builder
+            .get("blog-post", {
+              userAttributes: {
+                urlPath: `/blog/${slug}`,
+                locale: locale, // ✅ pass locale here
+              },
+            })
+            .toPromise();
+          setContent(contentData);
+        } catch (error) {
+          console.error("Error fetching content:", error);
+        }
+      };
 
-  return <RenderBuilderContent content={content} model="blog-post" />;
+      fetchData();
+    }
+  }, [slug, locale]);
+
+  if (!slug) {
+    return <div>Loading blog post...</div>;
+  }
+
+  return (
+    <>
+      {content ? (
+        <RenderBuilderContent content={content} model="blog-post" />
+      ) : (
+        <div>⚠️ Blog post not found</div>
+      )}
+
+      <BuilderComponent model="blog-post-layout" />
+    </>
+  );
 }
